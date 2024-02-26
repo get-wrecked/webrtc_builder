@@ -1,6 +1,6 @@
 Google WebRTC
 
-This is a clone of [Google WebRTC repositiry](https://webrtc.googlesource.com/src) of M121 release (01/23/24) for internal purposes.
+This is a clone of [Google WebRTC repositiry](https://webrtc.googlesource.com/src) of **M121 release (01/23/24)** for internal purposes.
 
 ---
 
@@ -8,15 +8,14 @@ This is a clone of [Google WebRTC repositiry](https://webrtc.googlesource.com/sr
 
 The repository contains:
 - The minimal set of headers used for WebRTC streaming purposes in Scope (*include* directory)
-- Static libraries, built using MSVC 14.37.32822 (Visual Studio 2022) and Windows SDK 10.0.20348.0 (*library* directory)
+- Static libraries, built using **MSVC 14.37.32822** (Visual Studio 2022) and **Windows SDK 10.0.20348.0** (*library* directory)
 - All the flags the static libraries were built with
 - Tools and patches to rebuild the static libraries if needed
 
 ## Build process
 
 #### Debug
-1. Get Depot Tools and unpack them (e.g. C:\depot_tools):
-https://storage.googleapis.com/chrome-infra/depot_tools.zip
+1. Get [Depot Tools](https://storage.googleapis.com/chrome-infra/depot_tools.zip) and unpack them (e.g. C:\depot_tools)
 
 2. Run Command Prompt as admin
 
