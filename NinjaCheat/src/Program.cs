@@ -35,6 +35,9 @@ namespace NinjaCheat
             
             string pffftPath = Path.Combine(workDir, @"obj\third_party\pffft\pffft.ninja");
             HackPffft(pffftPath);
+
+            string ffmpegPath = Path.Combine(workDir, @"obj\third_party\ffmpeg\ffmpeg_internal.ninja");
+            HackFfmpeg(ffmpegPath);
         }
 
         static int filesHacked = 0;
@@ -66,7 +69,7 @@ namespace NinjaCheat
             }
 
             string text = File.ReadAllText(filePath);
-            Console.WriteLine("Hacking libyuv file (" + filesHacked++ + ") :" + filePath);
+            Console.WriteLine("Hacking libyuv file (" + filesHacked++ + "): " + filePath);
             text = text.Replace(" /llvmlibthin", "");
             File.WriteAllText(filePath, text);
         }
@@ -80,8 +83,28 @@ namespace NinjaCheat
             }
 
             string text = File.ReadAllText(filePath);
-            Console.WriteLine("Hacking pffft file (" + filesHacked++ + ") :" + filePath);
+            Console.WriteLine("Hacking pffft file (" + filesHacked++ + "): " + filePath);
             text = text.Replace(" -Wno-shadow", "");
+            File.WriteAllText(filePath, text);
+        }
+
+        static void HackFfmpeg(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("ffmpeg_internal.ninja file wasn't found in the provided folder! Make sure the path is correct");
+                return;
+            }
+
+            string text = File.ReadAllText(filePath);
+            Console.WriteLine("Hacking ffmpeg file (" + filesHacked++ + "): " + filePath);
+            text = text.Replace("source_name_part = bitstream\n",
+                "source_name_part = bitstream\n" +
+                "build obj/third_party/ffmpeg/ffmpeg_internal/null_bsf.obj: cc ../../third_party/ffmpeg/libavcodec/null_bsf.c || obj/third_party/ffmpeg/ffmpeg_features.stamp\n" +
+                "  source_file_part = null_bsf.c\n" +
+                "  source_name_part = null_bsf\n");
+            text = text.Replace("obj/third_party/ffmpeg/ffmpeg_internal/bitstream.obj ",
+                "obj/third_party/ffmpeg/ffmpeg_internal/bitstream.obj obj/third_party/ffmpeg/ffmpeg_internal/null_bsf.obj ");
             File.WriteAllText(filePath, text);
         }
     }
