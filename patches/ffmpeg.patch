@@ -1,0 +1,111 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index 91e2f508c3..80aa4b4bc6 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -224,7 +224,7 @@ target(link_target_type, "ffmpeg_internal") {
+   }
+ 
+   # So we can append below and assume they're defined.
+-  cflags = []
++  cflags = [ "/experimental:c11atomics" ]
+   ldflags = []
+   libs = []
+   deps = [
+diff --git a/chromium/config/Chrome/win-msvc/x64/libavcodec/codec_list.c b/chromium/config/Chrome/win-msvc/x64/libavcodec/codec_list.c
+index 49f757b2d8..cbd7f3945a 100644
+--- a/chromium/config/Chrome/win-msvc/x64/libavcodec/codec_list.c
++++ b/chromium/config/Chrome/win-msvc/x64/libavcodec/codec_list.c
+@@ -1,4 +1,4 @@
+-static const AVCodec * const codec_list[] = {
++static const FFCodec * const codec_list[] = {
+     &ff_h264_decoder,
+     &ff_theora_decoder,
+     &ff_vp3_decoder,
+diff --git a/chromium/config/Chromium/win-msvc/x64/libavcodec/codec_list.c b/chromium/config/Chromium/win-msvc/x64/libavcodec/codec_list.c
+index 9407bd2775..653357d362 100644
+--- a/chromium/config/Chromium/win-msvc/x64/libavcodec/codec_list.c
++++ b/chromium/config/Chromium/win-msvc/x64/libavcodec/codec_list.c
+@@ -1,4 +1,4 @@
+-static const AVCodec * const codec_list[] = {
++static const FFCodec * const codec_list[] = {
+     &ff_theora_decoder,
+     &ff_vp3_decoder,
+     &ff_vp8_decoder,
+diff --git a/libavcodec/refstruct.c b/libavcodec/refstruct.c
+index 7597f6d0ee..4d99dad85a 100644
+--- a/libavcodec/refstruct.c
++++ b/libavcodec/refstruct.c
+@@ -46,7 +46,7 @@
+                                MKTAG('R', 'e', 'f', 'S') | (uint64_t)MKTAG('t', 'r', 'u', 'c') << 32)
+ 
+ #if __STDC_VERSION__ >= 201112L
+-#define REFCOUNT_OFFSET FFALIGN(sizeof(RefCount), FFMAX3(STRIDE_ALIGN, 16, _Alignof(max_align_t)))
++#define REFCOUNT_OFFSET FFALIGN(sizeof(RefCount), FFMAX3(STRIDE_ALIGN, 16, _Alignof(/*max_align_t*/double)))
+ #else
+ #define REFCOUNT_OFFSET FFALIGN(sizeof(RefCount), FFMAX(STRIDE_ALIGN, 16))
+ #endif
+diff --git a/libavformat/allformats.c b/libavformat/allformats.c
+index d4b505a5a3..e61b237503 100644
+--- a/libavformat/allformats.c
++++ b/libavformat/allformats.c
+@@ -570,8 +570,8 @@ extern const AVInputFormat  ff_vapoursynth_demuxer;
+ #include "libavformat/muxer_list.c"
+ #include "libavformat/demuxer_list.c"
+ 
+-static atomic_uintptr_t indev_list_intptr  = ATOMIC_VAR_INIT(0);
+-static atomic_uintptr_t outdev_list_intptr = ATOMIC_VAR_INIT(0);
++static atomic_uintptr_t indev_list_intptr  = 0; //ATOMIC_VAR_INIT(0);
++static atomic_uintptr_t outdev_list_intptr = 0; //ATOMIC_VAR_INIT(0);
+ 
+ const AVOutputFormat *av_muxer_iterate(void **opaque)
+ {
+diff --git a/libavformat/demux.c b/libavformat/demux.c
+index 6f640b92b1..8d0a06c5ef 100644
+--- a/libavformat/demux.c
++++ b/libavformat/demux.c
+@@ -21,7 +21,7 @@
+ 
+ #include <stdint.h>
+ 
+-#include "config_components.h"
++#include "../config_components.h"
+ 
+ #include "libavutil/avassert.h"
+ #include "libavutil/avstring.h"
+diff --git a/libavutil/cpu.c b/libavutil/cpu.c
+index 1e0607d581..8d1227ffff 100644
+--- a/libavutil/cpu.c
++++ b/libavutil/cpu.c
+@@ -49,8 +49,8 @@
+ #include <unistd.h>
+ #endif
+ 
+-static atomic_int cpu_flags = ATOMIC_VAR_INIT(-1);
+-static atomic_int cpu_count = ATOMIC_VAR_INIT(-1);
++static atomic_int cpu_flags = -1; //ATOMIC_VAR_INIT(-1);
++static atomic_int cpu_count = -1; //ATOMIC_VAR_INIT(-1);
+ 
+ static int get_cpu_flags(void)
+ {
+@@ -208,7 +208,7 @@ int av_parse_cpu_caps(unsigned *flags, const char *s)
+ 
+ int av_cpu_count(void)
+ {
+-    static atomic_int printed = ATOMIC_VAR_INIT(0);
++    static atomic_int printed = 0; //ATOMIC_VAR_INIT(0);
+ 
+     int nb_cpus = 1;
+     int count   = 0;
+diff --git a/libavutil/mem.c b/libavutil/mem.c
+index 37933f94ac..a7de5c3c47 100644
+--- a/libavutil/mem.c
++++ b/libavutil/mem.c
+@@ -69,7 +69,7 @@ void  free(void *ptr);
+  * dynamic libraries and remove -Wl,-Bsymbolic from the linker flags.
+  * Note that this will cost performance. */
+ 
+-static atomic_size_t max_alloc_size = ATOMIC_VAR_INIT(INT_MAX);
++static atomic_size_t max_alloc_size = INT_MAX; //ATOMIC_VAR_INIT(INT_MAX);
+ 
+ /* Set to 0 to remove the maximum allocation size. */
+ void av_max_alloc(size_t max){

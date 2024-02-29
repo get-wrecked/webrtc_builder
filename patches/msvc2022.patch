@@ -426,3 +426,42 @@ index 8c2ffcbd1e..7cc04123d3 100644
  
      // Compute the matched filter error.
      float e = y[i] - s;
+diff --git a/modules/video_coding/codecs/h264/h264_color_space.h b/modules/video_coding/codecs/h264/h264_color_space.h
+index 392ccaf563..1f9ac0aef8 100644
+--- a/modules/video_coding/codecs/h264/h264_color_space.h
++++ b/modules/video_coding/codecs/h264/h264_color_space.h
+@@ -17,7 +17,7 @@
+ #ifdef WEBRTC_USE_H264
+ 
+ #if defined(WEBRTC_WIN) && !defined(__clang__)
+-#error "See: bugs.webrtc.org/9213#c13."
++//#error "See: bugs.webrtc.org/9213#c13."
+ #endif
+ 
+ #include "api/video/color_space.h"
+diff --git a/modules/video_coding/codecs/h264/h264_decoder_impl.h b/modules/video_coding/codecs/h264/h264_decoder_impl.h
+index 97d091cf4b..f48f7f72f9 100644
+--- a/modules/video_coding/codecs/h264/h264_decoder_impl.h
++++ b/modules/video_coding/codecs/h264/h264_decoder_impl.h
+@@ -18,7 +18,7 @@
+ #ifdef WEBRTC_USE_H264
+ 
+ #if defined(WEBRTC_WIN) && !defined(__clang__)
+-#error "See: bugs.webrtc.org/9213#c13."
++//#error "See: bugs.webrtc.org/9213#c13."
+ #endif
+ 
+ #include <memory>
+diff --git a/modules/video_coding/codecs/h264/h264_encoder_impl.h b/modules/video_coding/codecs/h264/h264_encoder_impl.h
+index 19c16f3d8b..ca1157cff7 100644
+--- a/modules/video_coding/codecs/h264/h264_encoder_impl.h
++++ b/modules/video_coding/codecs/h264/h264_encoder_impl.h
+@@ -18,7 +18,7 @@
+ #ifdef WEBRTC_USE_H264
+ 
+ #if defined(WEBRTC_WIN) && !defined(__clang__)
+-#error "See: bugs.webrtc.org/9213#c13."
++//#error "See: bugs.webrtc.org/9213#c13."
+ #endif
+ 
+ #include <memory>

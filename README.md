@@ -46,11 +46,11 @@ The repository contains:
 `cd ..`
 `gclient sync`
 
-10. Apply a patch to make the sources buildable in VS 2022:
-`git apply scope_dir\tools\webrtc\patches\msvc2022.patch`
+10. Apply patches to make the sources buildable in VS 2022:
+`"..\..\webrtc_builder\patches\patch.bat"`
 
 11. Run a command to generate Ninja build files and configs:
-`gn gen --ide=vs2022 out/Debug --args="is_debug=true enable_iterator_debugging=true use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false windows_sdk_version=\"10.0.20348.0\""`
+`gn gen --ide=vs2022 out/Debug --args="is_debug=true ffmpeg_branding=\"Chromium\" rtc_use_h264=true enable_iterator_debugging=true use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false windows_sdk_version=\"10.0.20348.0\""`
 
 12. Run Ninja to build all the Debug libraries:
 `ninja -C out/Debug`
@@ -59,13 +59,13 @@ The repository contains:
 `FAILED: obj/third_party/pffft/pffft/pffft.obj`
 `cl : Command line error D8021 : invalid numeric argument '/Wno-shadow'`
 Run the following command
-`scope_dir\tools\webrtc\NinjaCheat\NinjaCheat out\Debug`
+`..\..\webrtc_builder\NinjaCheat\NinjaCheat out\Debug`
 
 #### Release
 The same build steps from 1 to 10 of the Debug build are also applied for Release. Other steps are a bit different:
 
 11. Run a command to generate Ninja build files and configs:
-`gn gen --ide=vs2022 out/Release --args="is_debug=false enable_iterator_debugging=true use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false windows_sdk_version=\"10.0.20348.0\""`
+`gn gen --ide=vs2022 out/Release --args="is_debug=false ffmpeg_branding=\"Chromium\" rtc_use_h264=true enable_iterator_debugging=true use_rtti=true is_clang=false rtc_build_tools=false rtc_include_tests=false rtc_build_examples=false windows_sdk_version=\"10.0.20348.0\""`
 
 12. Run Ninja to build all the Release libraries:
 `ninja -C out/Release`
@@ -95,6 +95,8 @@ patch hasn't been applied successfully
 
 #### ../../pc/legacy_stats_collector.cc(191): warning C4838: conversion from 'const double' to 'const ValueType &' requires a narrowing conversion
 
+####../../third_party/ffmpeg/libavcodec/allcodecs.c(924): error C2039: 'init_static_data': is not a member of 'AVCodec'
+#### ..\src\third_party\ffmpeg\libavcodec\codec.h(187): note: see declaration of 'AVCodec'
 ---
 
 ## Further Help
